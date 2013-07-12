@@ -12,6 +12,8 @@ case $act in
 	if [[ $yorn -eq y ]]
 	then
 	/bin/sh src/deploy.sh
+	else
+	exit 0
 	fi	
 
 
@@ -19,11 +21,27 @@ case $act in
 2)
 	echo "you choose updata a cron?[y/n]"
         read yorn
-	echo $yorn;;
+	echo $yorn
+	if [[ $yorn -eq y ]]
+	then
+	/bin/sh src/updata.sh
+	else
+	exit 0
+	fi	
+
+;;
 3)
 	echo "you choose delete a cron?[y/n]"
         read yorn
-	echo $yorn;;
+	echo $yorn
+
+	if [[ $yorn -eq y ]]
+	then
+	/bin/sh src/delete.sh
+	else
+	exit 0
+	fi	
+;;
 *)
 	echo "sorry!input erro!";;
 esac

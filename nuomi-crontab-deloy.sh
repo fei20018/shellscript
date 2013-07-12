@@ -1,9 +1,27 @@
 #!/bin/sh
+##variable
+task_sdir=/opt/task
+
+function prompt1
+{
 echo -e "pls choose action"\
-         "\n[1] delpoy a new cron"\
-         "\n[2] updata a cron"\
-         "\n[3] delete a cron"
-read act
+         "\n\t[1] delpoy a new cron"\
+         "\n\t[2] updata a cron"\
+         "\n\t[3] delete a cron"\
+         "\n\t[q] quit"
+}
+### main ##
+prompt1
+while read act
+do
+if [[ $act -eq 1 ||  $act -eq 2 ||  $act -eq 3 ||  $act -eq "q" ]]
+then
+	break
+else
+	echo "sorry!input erro!"
+	prompt1
+fi
+done
 case $act in
 1)
 	echo "you choose delpoy a new cron?[y/n]"
@@ -11,7 +29,7 @@ case $act in
 	echo $yorn
 	if [[ $yorn -eq y ]]
 	then
-	/bin/sh src/deploy.sh
+	source src/deploy.sh
 	else
 	exit 0
 	fi	
@@ -42,7 +60,11 @@ case $act in
 	exit 0
 	fi	
 ;;
+q)
+	exit 0
+;;
 *)
-	echo "sorry!input erro!";;
+	echo "sorry!input erro!"
+;;
 esac
 

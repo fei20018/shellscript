@@ -1,0 +1,20 @@
+#!/bin/bash
+date1=`date +%Y:%H:%M:%S`
+date2=`date +%Y:%H:%M:%S -d "5 minute ago"`
+cat  /data/nginx/log/access.log |awk -F'[ /]' '{if ($6>="'$date2'" && $6<="'$date1'"){print $0}}'|awk '{print $9}' > /access.txt
+count2=`cat /access.txt |grep ^2|wc -l`
+count3=`cat /access.txt |grep ^3|wc -l`
+count4=`cat /access.txt |grep ^4|wc -l`
+count5=`cat /access.txt |grep ^5|wc -l`
+count=`cat /access.txt |wc -l`
+PER2=$(printf "%d" $((count2*100/count)))
+PER3=$(printf "%d" $((count3*100/count)))
+PER4=$(printf "%d" $((count4*100/count)))
+PER5=$(printf "%d" $((count5*100/count)))
+#echo "2XX:  $PER2"
+#echo "3XX:  $PER3"
+#echo "4XX:  $PER4"
+#echo "5XX:  $PER5"
+
+num=$(printf "%d" $((PER4+$PER5)))
+echo "$num% (4XX:$PER4% 5XX:$PER5%)"  

@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# 2011 (C) Artyom Nosov <chip-set@mail.ru>
+#
+# v1.0: initial release
+# v1.2: fix indent and dash support
+export PATH="/usr/kerberos/bin:$PATH";export KRB5CCNAME=/tmp/krb5cc_pub_$$;trap kdestroy 0 1 2 3 5 15;kinit -k -t /etc/nagios/krb5.keytab;
+
+STATE_OK=0
+
+STATE_WARNING=1
+STATE_CRITICAL=2
+IP=$1
+W=$2
+C=$3
+code1=`ssh root@$1 "sh /opt/nagios/check_access" 2>/tmp/check_access.log`
+code=`echo $code1|awk -F'%' '{print $1}'`
+
+echo $code >> /tmp/check_access.log
+if [ "$code" -gt $3 ];then
+  echo "critical $code1|errorpercent=$code;$W;$C;0"
+  exit $STATE_CRITICAL
+elif [ "$code" -gt $2 ] && [ "$code" -lt $3 ];then
+  echo "waring $code1|errorpercent=$code;$W;$C;0"
+  exit $STATE_WARNING
+else 
+  echo "OK $code1|errorpercent=$code;$W;$C;0"
+  
+  exit $STATE_OK
+fi
+
+
